@@ -1,0 +1,100 @@
+{
+  "Safe": [
+    {
+        "name": "USDT-Lend",
+        "initial_investment": 7000,
+        "start_date": "2018-09-01T00:00:00",
+        "end_date": "2023-01-01T00:00:00",
+        "recurrent_investment": {
+            "amount": 1000,
+            "frequency": "M"
+        },
+        "annual_interest_rate": 0.16,
+        "type": "SavingsStrategy"
+    },
+    {
+        "name": "BTC-USD",
+        "initial_investment": 7000,
+        "start_date": "2018-09-01T00:00:00",
+        "end_date": "2023-01-01T00:00:00",
+        "recurrent_investment": {
+            "amount": 1000,
+            "frequency": "M"
+        },
+        "asset": "BTC-USD",
+        "type": "InvestmentStrategy"
+    },
+    {
+        "name": "ETH-USD",
+        "initial_investment": 7000,
+        "start_date": "2018-09-01T00:00:00",
+        "end_date": "2023-01-01T00:00:00",
+        "recurrent_investment": {
+            "amount": 1000,
+            "frequency": "M"
+        },
+        "asset": "ETH-USD",
+        "type": "InvestmentStrategy"
+    },
+    {
+        "name": "AAPL",
+        "initial_investment": 7000,
+        "start_date": "2018-09-01T00:00:00",
+        "end_date": "2023-01-01T00:00:00",
+        "recurrent_investment": {
+            "amount": 1000,
+            "frequency": "M"
+        },
+        "asset": "AAPL",
+        "type": "InvestmentStrategy"
+    },
+    {
+        "name": "AMZN",
+        "initial_investment": 7000,
+        "start_date": "2018-09-01T00:00:00",
+        "end_date": "2023-01-01T00:00:00",
+        "recurrent_investment": {
+            "amount": 1000,
+            "frequency": "M"
+        },
+        "asset": "AMZN",
+        "type": "InvestmentStrategy"
+    },
+    {
+        "name": "GOOG",
+        "initial_investment": 7000,
+        "start_date": "2018-09-01T00:00:00",
+        "end_date": "2023-01-01T00:00:00",
+        "recurrent_investment": {
+            "amount": 1000,
+            "frequency": "M"
+        },
+        "asset": "GOOG",
+        "type": "InvestmentStrategy"
+    },
+    {
+        "name": "TSLA",
+        "initial_investment": 7000,
+        "start_date": "2018-09-01T00:00:00",
+        "end_date": "2023-01-01T00:00:00",
+        "recurrent_investment": {
+            "amount": 1000,
+            "frequency": "M"
+        },
+        "asset": "TSLA",
+        "type": "InvestmentStrategy"
+    },
+    {
+        "name": "VGT",
+        "initial_investment": 7000,
+        "start_date": "2018-09-01T00:00:00",
+        "end_date": "2023-01-01T00:00:00",
+        "recurrent_investment": {
+            "amount": 1000,
+            "frequency": "M"
+        },
+        "asset": "VGT",
+        "type": "InvestmentStrategy"
+    }
+  ]
+}
