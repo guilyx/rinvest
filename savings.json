@@ -1,0 +1,62 @@
+{
+"Safe": [
+    {
+        "name": "USDT-Lend",
+        "initial_investment": 7000,
+        "start_date": "2018-09-01T00:00:00",
+        "end_date": "2021-01-01T00:00:00",
+        "recurrent_investment": {
+            "amount": 1000,
+            "frequency": "M",
+            "start_date": "2018-09-01T00:00:00",
+            "end_date": "2020-01-01T00:00:00"
+        },
+        "annual_interest_rate": 0.16,
+        "type": "SavingsStrategy"
+    },
+    {
+        "name": "USDC-Lend",
+        "initial_investment": 7000,
+        "start_date": "2021-02-01T00:00:00",
+        "end_date": "2023-01-01T00:00:00",
+        "recurrent_investment": {
+            "amount": 1000,
+            "frequency": "M",
+            "start_date": "2021-02-01T00:00:00",
+            "end_date": "2023-01-01T00:00:00"
+        },
+        "annual_interest_rate": 0.16,
+        "type": "SavingsStrategy"
+    }
+],
+"Unsafe": [
+    {
+        "name": "USDT-Lend",
+        "initial_investment": 7000,
+        "start_date": "2019-09-01T00:00:00",
+        "end_date": "2023-01-01T00:00:00",
+        "recurrent_investment": {
+            "amount": 400,
+            "frequency": "M",
+            "start_date": "2019-02-01T00:00:00",
+            "end_date": "2021-01-01T00:00:00"
+        },
+        "annual_interest_rate": 0.16,
+        "type": "SavingsStrategy"
+    },
+    {
+        "name": "USDC-Lend",
+        "initial_investment": 2000,
+        "start_date": "2021-02-01T00:00:00",
+        "end_date": "2023-01-01T00:00:00",
+        "recurrent_investment": {
+            "amount": 400,
+            "frequency": "M",
+            "start_date": "2019-02-01T00:00:00",
+            "end_date": "2021-01-01T00:00:00"
+        },
+        "annual_interest_rate": 0.16,
+        "type": "SavingsStrategy"
+    }
+]
+}

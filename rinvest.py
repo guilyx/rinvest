@@ -22,6 +22,8 @@ class StrategyPerformance:
 class RecurrentInvestment:
     amount: float
     frequency: str
+    start_date: Union[str, datetime]
+    end_date: Union[str, datetime]
 
 class Strategy:
     def __init__(self, name: str, initial_investment: float, start_date: Union[str, datetime], end_date: Union[str, datetime], recurrent_investment: Optional[RecurrentInvestment] = None):
@@ -91,13 +93,25 @@ class BackTester:
     def __init__(self, strategies: List[Strategy]):
         self.strategies = strategies
 
+    def add_strategy(self, strategy: Strategy):
+        self.strategies.append(strategy)
+
     def backtest(self) -> Dict[str, StrategyPerformance]:
-        performances = {}
-        for strategy in self.strategies:
-            performances[strategy.name] = strategy.calculate_return()
-        return performances
+        try:
+            performances = {}
+            for strategy in self.strategies:
+                performances[strategy.name] = strategy.calculate_return()
+            return performances
+        except:
+            print("Data was not available!")
+            return {}
 
     def plot_portfolio_values(self, performances: Dict[str, StrategyPerformance], frequencies: List[str]):
+        for f in frequencies:
+            is_valid_frequency(f)
+        if not performances:
+            return
+            
         n_frequencies = len(frequencies)
         fig, axs = plt.subplots(n_frequencies, 1, figsize=(14, 7 * n_frequencies), squeeze=False)
         titles = {'D': 'Daily', 'W': 'Weekly', 'M': 'Monthly', 'Y': 'Yearly'}
@@ -115,10 +129,10 @@ class BackTester:
             ax.legend()
 
     def plot_pnl(self, performances: Dict[str, StrategyPerformance], frequency='D'):
-        valid_frequencies = {'D', 'W', 'M', 'Y'}
-        if frequency not in valid_frequencies:
-            raise ValueError(f'Invalid frequency: {frequency}. Allowed values are {valid_frequencies}')
-
+        is_valid_frequency(frequency)
+        if not performances:
+            return
+            
         titles = {'D': 'Daily', 'W': 'Weekly', 'M': 'Monthly', 'Y': 'Yearly'}
         pnl_df = pd.DataFrame()
 
@@ -130,10 +144,10 @@ class BackTester:
         plt.title(f'{titles[frequency]} PNL')
 
     def plot_performance(self, performances: Dict[str, StrategyPerformance], frequency='D'):
-        valid_frequencies = {'D', 'W', 'M', 'Y'}
-        if frequency not in valid_frequencies:
-            raise ValueError(f'Invalid frequency: {frequency}. Allowed values are {valid_frequencies}')
-
+        is_valid_frequency(frequency)
+        if not performances:
+            return
+            
         titles = {'D': 'Daily', 'W': 'Weekly', 'M': 'Monthly', 'Y': 'Yearly'}
         performance_df = pd.DataFrame()
 
@@ -148,6 +162,32 @@ class BackTester:
 
     def show_plots(self):
         plt.tight_layout()
+        plt.show()
+
+class StrategyComparator:
+    def __init__(self, performances: Dict[str, Dict[str, StrategyPerformance]]):
+        self.performances = performances
+    
+    def plot_balance(self, frequencies: List[str]):
+        for f in frequencies:
+            is_valid_frequency(f)
+        if not frequencies:
+            return
+            
+        n_frequencies = len(frequencies)
+        fig, axs = plt.subplots(n_frequencies, 1, figsize=(14, 7 * n_frequencies), squeeze=False)
+        titles = {'D': 'Daily', 'W': 'Weekly', 'M': 'Monthly', 'Y': 'Yearly'}
+
+        for i, ax in enumerate(axs.flatten()):
+            for name, performance in self.performances.items():
+                total_daily_values = pd.concat([p.daily_portfolio_values for p in performance.values()], axis=1).fillna(method='ffill').sum(axis=1)
+                total_daily_values = total_daily_values.resample(frequencies[i]).last()
+                ax.plot(total_daily_values, label=f'Cumulative [{name}]')
+
+                ax.set_title(f'Portfolio Value ({titles[frequencies[i]]})')
+                ax.legend()
+    
+    def show_plots(self):
         plt.show()
 
 def convert_to_json(strategies: List[Union[InvestmentStrategy, SavingsStrategy]], filename: str):
@@ -176,22 +216,34 @@ def load_json(json_file: str):
         basket[name] = []
         for data in strategies:
             if data["type"] == "InvestmentStrategy":
-                recurrent_investment = RecurrentInvestment(data["recurrent_investment"]["amount"], data["recurrent_investment"]["frequency"])
+                recurrent_investment = RecurrentInvestment(data["recurrent_investment"]["amount"], data["recurrent_investment"]["frequency"], data["recurrent_investment"]["start_date"], data["recurrent_investment"]["end_date"])
                 basket[name].append(InvestmentStrategy(data["asset"], data["initial_investment"], data["start_date"], data["end_date"], recurrent_investment))
             elif data["type"] == "SavingsStrategy":
-                recurrent_investment = RecurrentInvestment(data["recurrent_investment"]["amount"], data["recurrent_investment"]["frequency"])
+                recurrent_investment = RecurrentInvestment(data["recurrent_investment"]["amount"], data["recurrent_investment"]["frequency"], data["recurrent_investment"]["start_date"], data["recurrent_investment"]["end_date"])
                 basket[name].append(SavingsStrategy(data["name"], data["annual_interest_rate"], data["initial_investment"], data["start_date"], data["end_date"], recurrent_investment))
         
     return basket
 
+def is_valid_frequency(frequency: str):
+    valid_frequencies = {'D', 'W', 'M', 'Y'}
+    if frequency not in valid_frequencies:
+        raise ValueError(f'Invalid frequency: {frequency}. Allowed values are {valid_frequencies}')
+
 
 if __name__ == "__main__":
-    basket = load_json("strategies.json")
-    for k, strategies in basket.items():        
+    basket = load_json("savings.json")
+    perfs = {}
+    for k, strategies in basket.items():
         tester = BackTester(strategies)
         strategy_performances = tester.backtest()
-        tester.plot_portfolio_values(strategy_performances, ['D', 'M'])
-        tester.plot_pnl(strategy_performances, 'M')
-        tester.plot_pnl(strategy_performances, 'W')
+        perfs[k] = strategy_performances
+        # tester.plot_portfolio_values(strategy_performances, ['D', 'M'])
+        # tester.plot_pnl(strategy_performances, 'M')
+        # tester.plot_pnl(strategy_performances, 'W')
         # tester.plot_performance(strategy_performances, 'M')
-        tester.show_plots()
+        # tester.show_plots()
+    
+    
+    comparator = StrategyComparator(perfs)
+    comparator.plot_balance(["D", "W", "M"])
+    comparator.show_plots()

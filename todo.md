@@ -1,0 +1,7 @@
+- Port to WebApp
+- Dynamic Plots
+- More Elaborate Strategies
+- Strategies Comparison with Data Analysis
+- More Data Viz for Strategies
+- Replace global end date with an optional sell date
+- Pivot USD balance from strategy to strategy (timely investment)
