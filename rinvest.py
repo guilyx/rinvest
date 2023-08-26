@@ -186,12 +186,12 @@ def load_json(json_file: str):
 
 
 if __name__ == "__main__":
-    basket = load_json("strategies.json")
+    basket = load_json("strat_guillaume.json")
     for k, strategies in basket.items():        
         tester = BackTester(strategies)
         strategy_performances = tester.backtest()
-        tester.plot_portfolio_values(strategy_performances, ['D', 'M'])
-        tester.plot_pnl(strategy_performances, 'M')
-        tester.plot_pnl(strategy_performances, 'W')
-        # tester.plot_performance(strategy_performances, 'M')
+        tester.plot_portfolio_values(strategy_performances, ['W'])
+        tester.plot_pnl(strategy_performances, 'Y')
+        # tester.plot_pnl(strategy_performances, 'W')
+        tester.plot_performance(strategy_performances, 'W')
         tester.show_plots()
